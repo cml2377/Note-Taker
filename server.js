@@ -48,23 +48,23 @@ var notesArray = [];
 //===============================================================================
 
 // Since the GET and POST functions grab from the same route, we can set it once up here.
-app.route("/api/notes")
-    // Grab the notes list (this should be updated for every new note and deleted note.)
-    .get("/api/notes", function (req, res) {
-        res.json(database);
-    })
+// app.route("/api/notes")
+//     // Grab the notes list (this should be updated for every new note and deleted note.)
+//     .get("/api/notes", function (req, res) {
+//         res.json(database);
+//     })
 
-    // Add a new note to the json db file.
-    .post("/api/notes", function (req, res) {
-        let newNote = req.body;
-        database.push(newNote);
-        // Gotta give newNote an id based on location to delete it later.
-        for (var i = 0; i < database.length; i++) {
-            noteLocation = database[i];
-            noteId = noteLocation + 1;
-        }
-        res.json(database);
-    });
+//     // Add a new note to the json db file.
+//     .post("/api/notes", function (req, res) {
+//         let newNote = req.body;
+//         database.push(newNote);
+//         // Gotta give newNote an id based on location to delete it later.
+//         for (var i = 0; i < database.length; i++) {
+//             noteLocation = database[i];
+//             noteId = noteLocation + 1;
+//         }
+//         res.json(database);
+//     });
 
 
 //=================================================================
@@ -76,24 +76,24 @@ app.route("/api/notes")
 //=================================================================
 
 
-app.delete("/api/notes/:id", function (req, res) {
-    fs.readFile("./Develop/db/db.json", 'utf8', (err, data) => {
-        data = JSON.parse(data);
-        console.log(JSON.stringify(data));
+// app.delete("/api/notes/:id", function (req, res) {
+//     fs.readFile("./Develop/db/db.json", 'utf8', (err, data) => {
+//         data = JSON.parse(data);
+//         console.log(JSON.stringify(data));
 
 
-        for (var i = 0; i < database.length; i++) {
-            if (noteLocation === database[i]) {
-                //splice it out
-                database.splice(i, 1);
-            }
-        }
-        // Rewrite database
-        fs.writeFileSync('/Develop/db/db.json', JSON.stringify(database));
-        return res.send("Removed");
-    });
-    return res.json(false);
-})
+//         for (var i = 0; i < database.length; i++) {
+//             if (noteLocation === database[i]) {
+//                 //splice it out
+//                 database.splice(i, 1);
+//             }
+//         }
+//         // Rewrite database
+//         fs.writeFileSync('/Develop/db/db.json', JSON.stringify(database));
+//         return res.send("Removed");
+//     });
+//     return res.json(false);
+// })
 
 //===========================================================================
 // Listening is the last thing Express should do. This sets up the server.
