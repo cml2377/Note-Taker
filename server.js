@@ -28,6 +28,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
 //==============================================================================
 // On page load, it should start with index.html. First get it and then listen.
 //==============================================================================
@@ -65,8 +66,9 @@ app.route("/api/notes")
         res.json(database);
     });
 
+
 //=================================================================
-// Delete a note based on an ID (maybe location in the array?)
+// Delete a note based on an ID (location in the array?)
 // This route is dependent on ID of note.
 //      1. Find note by id via a loop
 //      2. Splice? note out of array of notes.
