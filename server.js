@@ -39,6 +39,9 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "./Develop/public/notes.html"));
 })
 
+// We also need an array for notes.
+var notesArray = [];
+
 //===============================================================================
 // GET, POST, DELETE API Endpoints.
 //===============================================================================
@@ -54,26 +57,39 @@ app.route("/api/notes")
     .post("/api/notes", function (req, res) {
         let newNote = req.body;
         database.push(newNote);
+        // Gotta give newNote an id based on location to delete it later.
+        for (var i = 0; i < database.length; i++) {
+            noteLocation = database[i];
+            noteId = noteLocation + 1;
+        }
         res.json(database);
     });
 
 //=================================================================
 // Delete a note based on an ID (maybe location in the array?)
 // This route is dependent on ID of note.
-//      1. Find note by id
-//      2. Splice note out of array of notes.
+//      1. Find note by id via a loop
+//      2. Splice? note out of array of notes.
 //      3. Re-write db.json, just without that newly deleted note.
 //=================================================================
 
 
 app.delete("/api/notes/:id", function (req, res) {
-    var noteId = req.params.id;
+    fs.readFile("./Develop/db/db.json", 'utf8', (err, data) => {
+        data = JSON.parse(data);
+        console.log(JSON.stringify(data));
 
-    for (var i = 0; i < noteId.length; i++) {
-        if (noteId === noteId[i].routeName) {
-            return res.json(noteId[i]);
+
+        for (var i = 0; i < database.length; i++) {
+            if (noteLocation === database[i]) {
+                //splice it out
+                database.splice(i, 1);
+            }
         }
-    }
+        // Rewrite database
+        fs.writeFileSync('/Develop/db/db.json', JSON.stringify(database));
+        return res.send("Removed");
+    });
     return res.json(false);
 })
 
