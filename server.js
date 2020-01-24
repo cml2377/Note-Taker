@@ -8,7 +8,7 @@ const mySQL = require("mysql"); // Do we really need this?
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const database = require("./Develop/db/db")
+const database = require("./db/db")
 
 //======================================================================
 // This sets up the Express App
@@ -33,11 +33,11 @@ app.use(express.json());
 // On page load, it should start with index.html. First get it and then listen.
 //==============================================================================
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "./Develop/public/index.html"));
+    res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 // Notes html and it's "url"
 app.get("/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "./Develop/public/notes.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
 })
 
 // We also need an array for notes.
@@ -48,24 +48,23 @@ var notesArray = [];
 //===============================================================================
 
 // Since the GET and POST functions grab from the same route, we can set it once up here.
-// app.route("/api/notes")
-//     // Grab the notes list (this should be updated for every new note and deleted note.)
-//     .get("/api/notes", function (req, res) {
-//         res.json(database);
-//     })
+app.route("/api/notes")
+    // Grab the notes list (this should be updated for every new note and deleted note.)
+    .get("/api/notes", function (req, res) {
+        res.json(database);
+    })
 
-//     // Add a new note to the json db file.
-//     .post("/api/notes", function (req, res) {
-//         let newNote = req.body;
-//         database.push(newNote);
-//         // Gotta give newNote an id based on location to delete it later.
-//         for (var i = 0; i < database.length; i++) {
-//             noteLocation = database[i];
-//             noteId = noteLocation + 1;
-//         }
-//         res.json(database);
-//     });
-
+    // Add a new note to the json db file.
+    .post("/api/notes", function (req, res) {
+        let newNote = req.body;
+        database.push(newNote);
+        // Gotta give newNote an id based on location to delete it later.
+        // for (var i = 0; i < database.length; i++) {
+        //     noteLocation = database[i];
+        //     noteId = noteLocation + 1;
+        // }
+        res.json(newNote);
+    });
 
 //=================================================================
 // Delete a note based on an ID (location in the array?)

@@ -1,6 +1,8 @@
 # Note-Taker
 An app that can be used to write, save, and delete notes. My first foray into using express and writing back-end code. It will retrieve note data from a JSON file.
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?https://note-taker-supreme.herokuapp.com/)
+
 -----
 
 * The application frontend has already been created, it's your job to build the backend and connect the two.
@@ -21,13 +23,9 @@ An app that can be used to write, save, and delete notes. My first foray into us
 
   * DELETE `/api/notes/:id` - Should recieve a query paramter containing the id of a note to delete. This means you'll need to find a way to give each note a unique `id` when it's saved. In order to delete a note, you'll need to read all notes from the `db.json` file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
 
-## User Story
+## Demonstration 
 
-AS A user, I want to be able to write and save notes
-
-I WANT to be able to delete notes I've written before
-
-SO THAT I can organize my thoughts and keep track of tasks I need to complete
+![Demonstration of Note Taker as a gif](https://github.com/cml2377/dev-profile-generator/blob/master/assets/images/demonstration.gif)
 
 ## Business Context
 
