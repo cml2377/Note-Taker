@@ -33,6 +33,10 @@ app.use(express.json());
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "./Develop/public/index.html"));
 });
+// Notes html
+app.get("/notes", function (req, res) {
+    res.sendFile(path.join(__dirname, "./Develop/public/notes.html"));
+})
 
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
