@@ -24,13 +24,14 @@ app.use(express.static('public'));
 // This sets up data parsing-- Express will interpret it/format data as JSON.
 // This is required for API calls!
 //==============================================================================
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 
 //==============================================================================
 // On page load, it should start with index.html. First get it and then listen.
 //==============================================================================
+
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/index.html"));
 });
@@ -98,7 +99,7 @@ app.delete("/api/notes/:id", function (req, res) {
     // request to delete note by id.
     for (let i = 0; i < database.length; i++) {
 
-        if (database[i].id === req.params.id) {
+        if (database[i].id == req.params.id) {
             // Splice takes i position, and then deletes the 1 note.
             database.splice(i, 1);
             break;
@@ -109,10 +110,11 @@ app.delete("/api/notes/:id", function (req, res) {
 
         if (err) {
             return console.log(err);
+        } else {
+            console.log("Your note was deleted!");
         }
-        console.log("Your note was deleted!");
     });
-    res.status(200);
+    res.json(database);
 });
 
 //===========================================================================
