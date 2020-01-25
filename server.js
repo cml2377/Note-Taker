@@ -43,9 +43,6 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
 })
 
-// We also need an array for notes.
-var notesArray = [];
-
 //===============================================================================
 // GET, POST, DELETE API Endpoints.
 //===============================================================================
@@ -53,45 +50,46 @@ var notesArray = [];
 // Since the GET and POST functions grab from the same route, we can set it once up here.
 app.route("/api/notes")
     // Grab the notes list (this should be updated for every new note and deleted note.)
-    .get("/api/notes", function (req, res) {
+    .get(function (req, res) {
         res.json(database);
     })
 
     // Add a new note to the json db file.
-    .post("/api/notes", function (req, res) {
+    .post(function (req, res) {
         json = path.join(__dirname, "/db/db.json");
         let newNote = req.body;
 
-        // We get the db.json file here, and then any response is added with writedbjson
-        function getdbJSON() {
-            fs.readFile(json, "utf8", function (err, res) {
-                if (err) {
-                    console.log(err);
-                }
-                notesArray = JSON.parse(res)
-                writedbJSON();
-            });
-        } getdbJSON()
+        // This allows the test note to be the original note.
+        let highestId = 99;
+        // This loops through the array and finds the highest ID.
+        for (let i = 0; i < database.length; i++) {
+            let individualNote = database[i];
 
-        function writedbJSON() {
-            notesArray.push(newNote)
-            for (let i = 0; i < notesArray.length; i++) {
-                noteLocation = notesArray[i]
-                noteLocation.id = i + 1
+            if (individualNote.id > highestId) {
+                // highestId will always be the highest numbered id in the notesArray.
+                highestId = individualNote.id;
             }
-            fs.writeFile(json, JSON.stringify(notes), function (err) {
-
-                if (err) {
-                    return console.log(err);
-                }
-                console.log("Your note was saved!");
-            });
         }
-        res.sendFile(path.join(__dirname, "/db/db.json"));
+        // This assigns an ID to the newNote. 
+        newNote.id = highestId + 1;
+        // We push it to db.json.
+        database.push(newNote)
+
+        // Write the db.json file again.
+        fs.writeFile(json, JSON.stringify(notes), function (err) {
+
+            if (err) {
+                return console.log(err);
+            }
+            console.log("Your note was saved!");
+        });
+        // Gives back the response, which is the user's new note. 
+        res.json(newNote);
     });
 
 //=================================================================
-// Delete a note based on an ID (location in the array)
+// Delete a note based on an ID (cannot be location in array,
+// the location will change if you splice things out)
 // This route is dependent on ID of note.
 //      1. Find note by id via a loop
 //      2. Splice? note out of array of notes.
