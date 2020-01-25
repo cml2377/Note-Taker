@@ -1,40 +1,25 @@
 # Note-Taker
 An app that can be used to write, save, and delete notes. My first foray into using express and writing back-end code. It will retrieve note data from a JSON file.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cml2377/Note-Taker)
+[[Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cml2377/Note-Taker)
 
 -----
 
-* The application frontend has already been created, it's your job to build the backend and connect the two.
-
-* The following HTML routes should be created:
-
-  * GET `/notes` - Should return the `notes.html` file.
-
-  * GET `*` - Should return the `index.html` file
-
-* The application should have a `db.json` file on the backend that will be used to store and retrieve notes using the `fs` module.
-
-* The following API routes should be created:
-
-  * GET `/api/notes` - Should read the `db.json` file and return all saved notes as JSON.
-
-  * POST `/api/notes` - Should recieve a new note to save on the request body, add it to the `db.json` file, and then return the new note to the client.
-
-  * DELETE `/api/notes/:id` - Should recieve a query paramter containing the id of a note to delete. This means you'll need to find a way to give each note a unique `id` when it's saved. In order to delete a note, you'll need to read all notes from the `db.json` file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
-
 ## Demonstration 
 
-![Demonstration of Note Taker as a gif](https://github.com/cml2377/dev-profile-generator/blob/master/assets/images/demonstration.gif)
+![Demonstration of Note Taker as a gif](https://github.com/cml2377/Note-Taker/blob/master/public/assets/demo.gif)
 
 ## Business Context
 
 For users that need to keep track of a lot of information, it's easy to forget or be unable to recall something important. Being able to take persistent notes allows users to have written information available when needed.
 
-## Acceptance Criteria
+## How to Use
 
-Application should allow users to create and save notes.
+Let's get started! Click on the Get Started button on the home page to start adding notes. 
+When you get to the notes page, on the left, you see saved notes along with a delete icon to trash the note when you're done. 
+On the right, you can create a new note with a title and notes within the description. 
+On the top right-hand corner, you can click save to automatically save the new note to the list on the left. 
 
-Application should allow users to view previously saved notes.
+### Thanks
 
-Application should allow users to delete previously saved notes.
+UT Coding bootcamp for answering all of my silly questions. 

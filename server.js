@@ -90,7 +90,7 @@ app.route("/api/notes")
 // the location will change if you splice things out)
 // This route is dependent on ID of note.
 //      1. Find note by id via a loop
-//      2. Splice? note out of array of notes.
+//      2. Splice note out of array of notes.
 //      3. Re-write db.json, just without that newly deleted note.
 //=================================================================
 
