@@ -1,7 +1,7 @@
 # Note-Taker
 An app that can be used to write, save, and delete notes. My first foray into using express and writing back-end code. It will retrieve note data from a JSON file.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://note-taker-supreme.herokuapp.com/)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cml2377/Note-Taker/blob/master/server.js)
 
 -----
 
