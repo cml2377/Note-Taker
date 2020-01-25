@@ -34,10 +34,7 @@ app.use(express.json());
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/index.html"));
 });
-// From readme requirements
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
-});
+
 // Notes html and it's "url"
 app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
@@ -56,7 +53,7 @@ app.route("/api/notes")
 
     // Add a new note to the json db file.
     .post(function (req, res) {
-        json = path.join(__dirname, "/db/db.json");
+        let jsonFilePath = path.join(__dirname, "/db/db.json");
         let newNote = req.body;
 
         // This allows the test note to be the original note.
@@ -76,7 +73,7 @@ app.route("/api/notes")
         database.push(newNote)
 
         // Write the db.json file again.
-        fs.writeFile(json, JSON.stringify(notes), function (err) {
+        fs.writeFile(jsonFilePath, JSON.stringify(database), function (err) {
 
             if (err) {
                 return console.log(err);
@@ -97,23 +94,25 @@ app.route("/api/notes")
 //=================================================================
 
 app.delete("/api/notes/:id", function (req, res) {
-    let id = req.params.id;
-    fs.readFile(__dirname + "db/db.json", "utf8", (err, data) => {
-        let noteObject = JSON.parse(data);
-        console.log(noteObject)
-        for (i = 0; i < noteObject.length - 1; i++) {
-            if (noteObject[i].id === id) {
-                return i
-            }
-            noteObject.splice(i, 1);
+    let jsonFilePath = path.join(__dirname, "/db/db.json");
+    // request to delete note by id.
+    for (let i = 0; i < database.length; i++) {
+
+        if (database[i].id === req.params.id) {
+            // Splice takes i position, and then deletes the 1 note.
+            database.splice(i, 1);
+            break;
         }
-        fs.writeFile("/db/db.json", "utf8", noteObject, (err) => {
-            if (err) {
-                throw err
-            }
-        })
-        return res.json(JSON.parse(data))
-    })
+    }
+    // Write the db.json file again.
+    fs.writeFileSync(jsonFilePath, JSON.stringify(database), function (err) {
+
+        if (err) {
+            return console.log(err);
+        }
+        console.log("Your note was deleted!");
+    });
+    res.status(200);
 });
 
 //===========================================================================
