@@ -4,7 +4,6 @@
 // Below are my dependencies; I'm unhealthily co-dependent.
 //======================================================================
 
-const mySQL = require("mysql"); // Do we really need this?
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -35,6 +34,10 @@ app.use(express.json());
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/index.html"));
 });
+// From readme requirements
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "/public/index.html"));
+});
 // Notes html and it's "url"
 app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
@@ -56,43 +59,64 @@ app.route("/api/notes")
 
     // Add a new note to the json db file.
     .post("/api/notes", function (req, res) {
+        json = path.join(__dirname, "/db/db.json");
         let newNote = req.body;
-        database.push(newNote);
-        // Gotta give newNote an id based on location to delete it later.
-        // for (var i = 0; i < database.length; i++) {
-        //     noteLocation = database[i];
-        //     noteId = noteLocation + 1;
-        // }
-        res.json(newNote);
+
+        // We get the db.json file here, and then any response is added with writedbjson
+        function getdbJSON() {
+            fs.readFile(json, "utf8", function (err, res) {
+                if (err) {
+                    console.log(err);
+                }
+                notesArray = JSON.parse(res)
+                writedbJSON();
+            });
+        } getdbJSON()
+
+        function writedbJSON() {
+            notesArray.push(newNote)
+            for (let i = 0; i < notesArray.length; i++) {
+                noteLocation = notesArray[i]
+                noteLocation.id = i + 1
+            }
+            fs.writeFile(json, JSON.stringify(notes), function (err) {
+
+                if (err) {
+                    return console.log(err);
+                }
+                console.log("Your note was saved!");
+            });
+        }
+        res.sendFile(path.join(__dirname, "/db/db.json"));
     });
 
 //=================================================================
-// Delete a note based on an ID (location in the array?)
+// Delete a note based on an ID (location in the array)
 // This route is dependent on ID of note.
 //      1. Find note by id via a loop
 //      2. Splice? note out of array of notes.
 //      3. Re-write db.json, just without that newly deleted note.
 //=================================================================
 
-
-// app.delete("/api/notes/:id", function (req, res) {
-//     fs.readFile("./Develop/db/db.json", 'utf8', (err, data) => {
-//         data = JSON.parse(data);
-//         console.log(JSON.stringify(data));
-
-
-//         for (var i = 0; i < database.length; i++) {
-//             if (noteLocation === database[i]) {
-//                 //splice it out
-//                 database.splice(i, 1);
-//             }
-//         }
-//         // Rewrite database
-//         fs.writeFileSync('/Develop/db/db.json', JSON.stringify(database));
-//         return res.send("Removed");
-//     });
-//     return res.json(false);
-// })
+app.delete("/api/notes/:id", function (req, res) {
+    let id = req.params.id;
+    fs.readFile(__dirname + "db/db.json", "utf8", (err, data) => {
+        let noteObject = JSON.parse(data);
+        console.log(noteObject)
+        for (i = 0; i < noteObject.length - 1; i++) {
+            if (noteObject[i].id === id) {
+                return i
+            }
+            noteObject.splice(i, 1);
+        }
+        fs.writeFile("/db/db.json", "utf8", noteObject, (err) => {
+            if (err) {
+                throw err
+            }
+        })
+        return res.json(JSON.parse(data))
+    })
+});
 
 //===========================================================================
 // Listening is the last thing Express should do. This sets up the server.
